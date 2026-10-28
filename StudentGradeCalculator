@@ -1,0 +1,24 @@
+public class StudentGradeCalculator {
+    public static void main(String[] args) {
+        String studentName = "Alex Cancelliere";
+        String major = "Psychology";
+        String course = "PSYCH 101";
+
+        double grade1 = 91;
+        double grade2 = 86;
+        double grade3 = 95;
+
+        double average = (grade1 + grade2 + grade3) / 3;
+
+        System.out.println("Student: " + studentName);
+        System.out.println("Major: " + major);
+        System.out.println("Course: " + course);
+        System.out.println("Average: " + average);
+
+        if (average >= 70) {
+            System.out.println("Status: Passed");
+        } else {
+            System.out.println("Status: Failed");
+        }
+    }
+}
