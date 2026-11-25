@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Course List</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 850px; margin: 40px auto; padding: 0 18px; color: #222; }
+        h1 { color: #243b53; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #d9e2ec; text-align: left; }
+        th { background: #edf2f7; }
+        #status { margin-top: 12px; color: #52606d; }
+    </style>
+</head>
+<body>
+    <h1>Student Course List</h1>
+    <p>Courses currently available in the Student Course API.</p>
+    <button id="refreshButton">Refresh courses</button>
+    <p id="status" role="status">Loading courses...</p>
+    <table>
+        <thead>
+            <tr><th>Course Code</th><th>Title</th><th>Credits</th></tr>
+        </thead>
+        <tbody id="courseRows"></tbody>
+    </table>
+
+    <script>
+        async function loadCourses() {
+            const status = document.getElementById("status");
+            const rows = document.getElementById("courseRows");
+            status.textContent = "Loading courses...";
+            rows.replaceChildren();
+
+            try {
+                const response = await fetch("/api/courses");
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const courses = await response.json();
+                courses.forEach(course => {
+                    const row = document.createElement("tr");
+
+                    [course.code, course.title, course.credits].forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    });
+
+                    rows.appendChild(row);
+                });
+
+                status.textContent = `${courses.length} course(s) loaded.`;
+            } catch (error) {
+                status.textContent = `Could not load courses: ${error.message}`;
+            }
+        }
+
+        document.getElementById("refreshButton").addEventListener("click", loadCourses);
+        loadCourses();
+    </script>
+</body>
+</html>
